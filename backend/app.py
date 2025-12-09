@@ -15,7 +15,7 @@ EXPECTED_API_KEY = os.environ.get("API_KEY", "SET_YOUR_API_KEY_IN_ENV")
 API_KEY_HEADER = "X-Api-Key"
 
 # Replace [YOUR_BUCKET_NAME] with your actual bucket name when you deploy
-FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "https://storage.googleapis.com/sudoku-app-478802/")
+FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "http://storage.googleapis.com/sudoku-app-478802")
 
 # Configure CORS: ONLY allow requests from your specific Cloud Storage domain
 # This handles the Access-Control-Allow-Origin header automatically.
