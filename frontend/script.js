@@ -11,10 +11,13 @@ const SUDOKU_BOARD = document.getElementById('sudoku-grid');
 const NEW_GAME_BUTTON = document.getElementById('new-game-button');
 const MESSAGE_DIV = document.getElementById('message');
 const DIFFICULTY_SELECT = document.getElementById('difficulty');
+const TIMER_DISPLAY = document.getElementById('timer-display');
 const BOARD_SIZE = 9;
 
 // Stores the full solution for the current puzzle
 let SOLUTION_BOARD = [];
+let totalSeconds = 0;
+let timerInterval = null;
 
 // --- API FETCH FUNCTION ---
 
@@ -70,6 +73,14 @@ function createEmptyGrid() {
         input.setAttribute('type', 'number');
         input.setAttribute('maxlength', '1'); // Limit input to one digit
         input.addEventListener('input', validateInput);
+
+        // --- MOUSE-DOWN Listener for RELIABLE highlighting (FIX) ---
+        cell.addEventListener('mousedown', (event) => {
+            event.preventDefault(); 
+            input.focus(); 
+            highlightRowAndCol(cell);
+        });
+        // --- END MOUSE-DOWN LISTENER ---
         
         cell.appendChild(input);
         SUDOKU_BOARD.appendChild(cell);
@@ -133,6 +144,7 @@ function checkWinCondition() {
     });
 
     if (solved) {
+        stopTimer();
         MESSAGE_DIV.textContent = "🥳 CONGRATULATIONS! You solved the puzzle!";
         // Disable all cells after solving
         cells.forEach(input => input.disabled = true);
@@ -141,13 +153,45 @@ function checkWinCondition() {
 
 // --- INITIALIZATION ---
 // Attach the highlight function to the main grid container
-SUDOKU_BOARD.addEventListener('click', (event) => {
-    // Traverse up from the clicked element to find the parent .cell div
-    const clickedCell = event.target.closest('.cell');
-    highlightRowAndCol(clickedCell);
-});
+//SUDOKU_BOARD.addEventListener('click', (event) => {
+//    // Traverse up from the clicked element to find the parent .cell div
+//    const clickedCell = event.target.closest('.cell');
+//    highlightRowAndCol(clickedCell);
+//});
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    
+    const formattedMin = String(min).padStart(2, '0');
+    const formattedSec = String(sec).padStart(2, '0');
+    
+    return `${formattedMin}:${formattedSec}`;
+}
+
+async function startTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    totalSeconds = 0;
+    TIMER_DISPLAY.textContent = formatTime(totalSeconds);
+    
+    timerInterval = setInterval(() => {
+        totalSeconds++;
+        TIMER_DISPLAY.textContent = formatTime(totalSeconds);
+    }, 1000); 
+}
+
+async function stopTimer() {
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
 
 async function initializeGame() {
+    startTimer();
     createEmptyGrid(); // Draw the initial 9x9 board structure
     const difficulty = DIFFICULTY_SELECT.value;
     const data = await fetchNewSudoku(difficulty);
