@@ -1,85 +1,164 @@
+/* --- General Page Styling --- */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f4f4f4;
+    background-color: #e9ecef; /* Light gray background */
     margin: 0;
 }
 
 .container {
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15); /* More prominent shadow */
     text-align: center;
 }
 
 h1 {
-    color: #333;
-    margin-bottom: 20px;
+    color: #343a40;
+    margin-bottom: 25px;
 }
 
+/* --- Controls Section --- */
 .controls {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
 }
 
 #difficulty, #new-game-button {
-    padding: 8px 15px;
+    padding: 10px 20px;
     font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s;
 }
 
 #new-game-button {
-    background-color: #007bff;
+    background-color: #28a745; /* Green button */
     color: white;
     cursor: pointer;
     border: none;
-    margin-left: 10px;
+    font-weight: 600;
 }
 
 #new-game-button:hover {
-    background-color: #0056b3;
+    background-color: #218838;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
 }
 
+/* --- Sudoku Grid Container --- */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: repeat(9, 1fr);
-    width: 450px; /* 9 * 50px */
+    width: 450px; /* Base size */
     height: 450px;
-    border: 3px solid #000;
+    /* Main outer border */
+    border: 4px solid #000; 
     margin: 0 auto;
+    background-color: #fff;
+    box-sizing: content-box; /* Ensure padding/border doesn't affect size */
 }
 
 .cell {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ccc;
-    font-size: 24px;
-    font-weight: bold;
+    border: 1px solid #adb5bd; /* Lighter inner borders */
+    font-size: 20px; /* Requested font size */
     color: #000;
-    cursor: pointer;
-    background-color: #fff;
-    /* Allows user input */
-    contenteditable: "true";
-    caret-color: transparent; /* Hides cursor blink */
+    box-sizing: border-box; /* Include padding/border in cell dimensions */
+    position: relative;
+    padding: 0; /* Remove default padding */
 }
 
-/* Thicker borders for 3x3 boxes */
-.cell:nth-child(3n) { border-right-width: 3px; }
-.cell:nth-child(27n) { border-bottom-width: 3px; }
+.cell input {
+    /* Input field inside the cell */
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 500;
+    color: #343a40;
+    border: none;
+    background-color: transparent;
+    box-sizing: border-box;
+    outline: none; /* Remove focus outline */
+}
 
-/* Overwrite corner cases */
-.cell:nth-child(9n) { border-right: none; }
-.grid-container > :nth-child(73) ~ .cell { border-bottom: none; }
+/* --- Thicker 3x3 Box Borders --- */
 
-/* Style for pre-filled (given) numbers */
+/* Horizontal lines every 3 rows (starting from the second 3x3 block) */
+.grid-container > :nth-child(27n + 1),
+.grid-container > :nth-child(27n + 2),
+.grid-container > :nth-child(27n + 3),
+.grid-container > :nth-child(27n + 4),
+.grid-container > :nth-child(27n + 5),
+.grid-container > :nth-child(27n + 6),
+.grid-container > :nth-child(27n + 7),
+.grid-container > :nth-child(27n + 8),
+.grid-container > :nth-child(27n + 9) {
+    border-bottom-width: 3px !important;
+    border-bottom-color: #000 !important;
+}
+
+/* Vertical lines every 3 columns */
+.cell:nth-child(3n) { border-right-width: 3px; border-right-color: #000; }
+.cell:nth-child(9n) { border-right-width: 1px; border-right-color: #adb5bd; } /* Reset last column */
+
+/* Reset borders for the last row/column block */
+.grid-container > :nth-child(73) ~ .cell,
+.grid-container > :nth-child(74) ~ .cell,
+.grid-container > :nth-child(75) ~ .cell,
+.grid-container > :nth-child(76) ~ .cell,
+.grid-container > :nth-child(77) ~ .cell,
+.grid-container > :nth-child(78) ~ .cell,
+.grid-container > :nth-child(79) ~ .cell,
+.grid-container > :nth-child(80) ~ .cell,
+.grid-container > :nth-child(81) ~ .cell {
+    border-bottom: 1px solid #adb5bd !important;
+}
+
+/* --- Input States and Styling --- */
+
+/* Pre-filled (given) numbers from the API */
 .given {
-    background-color: #eee;
-    color: #333;
-    font-weight: bold;
+    background-color: #f8f9fa !important; /* Slightly distinct background */
+    color: #212529 !important;
+    font-weight: 600 !important;
+    cursor: default !important;
+}
+
+.given input {
+    color: #212529 !important;
+    font-weight: 600 !important;
+}
+
+/* Incorrectly entered numbers */
+.incorrect {
+    color: #dc3545 !important; /* Red text */
+    background-color: #ffe0e3 !important;
+}
+
+.incorrect input {
+    color: #dc3545 !important;
+}
+
+/* On cell focus */
+.cell:focus-within {
+    background-color: #e9f5ff; /* Light blue highlight on focus */
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    min-height: 25px;
+    color: #17a2b8; /* Info color */
 }
