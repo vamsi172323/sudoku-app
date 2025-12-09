@@ -140,6 +140,12 @@ function checkWinCondition() {
 }
 
 // --- INITIALIZATION ---
+// Attach the highlight function to the main grid container
+SUDOKU_BOARD.addEventListener('click', (event) => {
+    // Traverse up from the clicked element to find the parent .cell div
+    const clickedCell = event.target.closest('.cell');
+    highlightRowAndCol(clickedCell);
+});
 
 async function initializeGame() {
     createEmptyGrid(); // Draw the initial 9x9 board structure
@@ -150,6 +156,37 @@ async function initializeGame() {
         // The API returns 'puzzle' and 'solution' as flattened 81-element arrays
         renderPuzzle(data.puzzle, data.solution);
     }
+    highlightRowAndCol(null); // Clear all highlights on new game load
+}
+
+// --- HIGHLIGHTING LOGIC ---
+
+function highlightRowAndCol(clickedCell) {
+    const cells = SUDOKU_BOARD.querySelectorAll('.cell');
+    
+    // Remove all existing highlight classes
+    cells.forEach(cell => {
+        cell.classList.remove('highlight');
+    });
+
+    if (!clickedCell) return; // Exit if no cell was clicked (e.g., clicking controls)
+
+    const cellIndex = Array.from(cells).indexOf(clickedCell);
+    if (cellIndex === -1) return;
+
+    const row = Math.floor(cellIndex / BOARD_SIZE);
+    const col = cellIndex % BOARD_SIZE;
+
+    // Apply highlight to the entire row and column
+    cells.forEach((cell, index) => {
+        const currentRow = Math.floor(index / BOARD_SIZE);
+        const currentCol = index % BOARD_SIZE;
+
+        // Check if the cell is in the same row OR same column
+        if (currentRow === row || currentCol === col) {
+            cell.classList.add('highlight');
+        }
+    });
 }
 
 NEW_GAME_BUTTON.addEventListener('click', initializeGame);
