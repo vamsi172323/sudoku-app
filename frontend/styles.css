@@ -85,8 +85,8 @@ h1 {
     height: 100%;
     text-align: center;
     /* Large font size for visibility */
-    font-size: 24px; 
-    font-weight: 600; 
+    font-size: 32px; 
+    font-weight: 300; 
     color: #343a40;
     
     /* Crucial: remove input borders and background */
@@ -153,9 +153,15 @@ h1 {
     color: #dc3545 !important;
 }
 
-/* On cell focus */
+/* --- NEW Highlight Style --- */
+.highlight {
+    /* Light blue/yellow background for row/column highlight */
+    background-color: #e6f7ff !important; 
+}
+
+/* Style for the currently focused cell (slightly different color) */
 .cell:focus-within {
-    background-color: #e9f5ff; 
+    background-color: #d1e7fd; /* Medium blue highlight on active cell */
 }
 
 .message {
@@ -178,3 +184,4 @@ h1 {
 .cell input[type=number] {
     -moz-appearance: textfield;
 }
+
