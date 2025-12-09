@@ -172,6 +172,23 @@ h1 {
     color: #17a2b8;
 }
 
+/* --- Timer Display Styling --- */
+#timer-display {
+    font-size: 18px;
+    font-weight: bold;
+    color: #495057;
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background-color: #f8f9fa;
+}
+
+.controls {
+    /* Adjust gap in controls section to fit the timer nicely */
+    gap: 20px; 
+    /* ... rest of controls styles ... */
+}
+
 /* --- Hide Input Number Spinners (Mouse Up/Down) --- */
 /* For Chrome, Safari, Edge, Opera */
 .cell input::-webkit-outer-spin-button,
