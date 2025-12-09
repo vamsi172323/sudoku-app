@@ -141,7 +141,7 @@ function checkWinCondition() {
 
 // --- INITIALIZATION ---
 // Attach the highlight function to the main grid container
-SUDOKU_BOARD.addEventListener('mousedown', (event) => {
+SUDOKU_BOARD.addEventListener('click', (event) => {
     // Traverse up from the clicked element to find the parent .cell div
     const clickedCell = event.target.closest('.cell');
     highlightRowAndCol(clickedCell);
