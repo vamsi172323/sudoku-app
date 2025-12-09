@@ -1,3 +1,57 @@
+/* --- General Page Styling --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e9ecef; /* Light gray background */
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+h1 {
+    color: #343a40;
+    margin-bottom: 25px;
+}
+
+/* --- Controls Section --- */
+.controls {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+}
+
+#difficulty, #new-game-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s;
+}
+
+#new-game-button {
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+}
+
+#new-game-button:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+}
+
 /* --- Sudoku Grid Container --- */
 .grid-container {
     display: grid;
@@ -16,14 +70,111 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Use ONLY a thin border-bottom and border-right */
+    /* Define thin borders on RIGHT and BOTTOM */
     border-bottom: 1px solid #adb5bd; 
     border-right: 1px solid #adb5bd;
-    /* We will define the TOP and LEFT borders using overrides below */
     
-    font-size: 24px; 
     color: #000;
     box-sizing: border-box;
     padding: 0;
 }
-/* Note: Input styles remain the same for font size/spinners */
+
+.cell input {
+    /* Ensure the input takes up full cell space */
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    /* Large font size for visibility */
+    font-size: 24px; 
+    font-weight: 600; 
+    color: #343a40;
+    
+    /* Crucial: remove input borders and background */
+    border: none;
+    background-color: transparent;
+    box-sizing: border-box;
+    outline: none;
+    padding: 0; 
+    margin: 0;
+}
+
+/* --- THICK BORDERS for 3x3 Blocks (Uses border-left/border-top overrides) --- */
+
+/* Vertical lines: Apply thick border-left to the 1st, 4th, and 7th columns */
+.cell:nth-child(9n + 1), /* 1st column */
+.cell:nth-child(9n + 4), /* 4th column */
+.cell:nth-child(9n + 7) { /* 7th column */
+    border-left: 3px solid #000 !important; 
+}
+
+/* Horizontal lines: Apply thick border-top to cells starting on Row 4 and Row 7 */
+.cell:nth-child(n+28):nth-child(-n+36), /* Row 4 (28-36) */
+.cell:nth-child(n+55):nth-child(-n+63) { /* Row 7 (55-63) */
+    border-top: 3px solid #000 !important;
+}
+
+/* --- Clean Up Inner Thin Lines (Re-applying thin border-left/top where needed) --- */
+
+/* Thin border-left for all other columns (2nd, 3rd, 5th, 6th, 8th, 9th) */
+.cell:nth-child(9n + 2),
+.cell:nth-child(9n + 3),
+.cell:nth-child(9n + 5),
+.cell:nth-child(9n + 6),
+.cell:nth-child(9n + 8),
+.cell:nth-child(9n + 9) {
+    border-left: 1px solid #adb5bd !important;
+}
+
+/* Thin border-top for rows that shouldn't be thick (2, 3, 5, 6, 8, 9) */
+.grid-container > :nth-child(n + 10):nth-child(-n + 27), /* Row 2-3 */
+.grid-container > :nth-child(n + 37):nth-child(-n + 54), /* Row 5-6 */
+.grid-container > :nth-child(n + 64):nth-child(-n + 81) { /* Row 8-9 */
+    border-top: 1px solid #adb5bd !important;
+}
+
+
+/* --- Input States and Styling --- */
+
+/* Pre-filled (given) numbers from the API */
+.given {
+    background-color: #f0f8ff !important; /* Light blue/gray background */
+    color: #212529 !important;
+    font-weight: 600 !important;
+    cursor: default !important;
+}
+
+.given input {
+    color: #212529 !important;
+    font-weight: 600 !important;
+}
+
+/* Incorrectly entered numbers */
+.incorrect input {
+    color: #dc3545 !important;
+}
+
+/* On cell focus */
+.cell:focus-within {
+    background-color: #e9f5ff; 
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    min-height: 25px;
+    color: #17a2b8;
+}
+
+/* --- Hide Input Number Spinners (Mouse Up/Down) --- */
+/* For Chrome, Safari, Edge, Opera */
+.cell input::-webkit-outer-spin-button,
+.cell input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* For Firefox */
+.cell input[type=number] {
+    -moz-appearance: textfield;
+}
