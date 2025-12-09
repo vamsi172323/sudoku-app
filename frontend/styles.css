@@ -86,7 +86,7 @@ h1 {
     text-align: center;
     /* Large font size for visibility */
     font-size: 32px; 
-    font-weight: 300; 
+    font-weight: 50; 
     color: #343a40;
     
     /* Crucial: remove input borders and background */
